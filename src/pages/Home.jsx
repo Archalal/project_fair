@@ -1,5 +1,5 @@
-import React from 'react'
-import { Link} from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate} from 'react-router-dom'
 import landingImage from '../assets/image/pageLanding.png'
 import CardProject from '../component/CardProject'
 import Card from 'react-bootstrap/Card';
@@ -8,7 +8,25 @@ import Card from 'react-bootstrap/Card';
 
 
 
+
 const Home = () => {
+    const[isLoggined,setIsLoggined]=useState(false)
+    const navigate=useNavigate()
+
+    useEffect(()=>{
+
+        if(sessionStorage.getItem("token")){
+            setIsLoggined(true)
+        }
+        else{
+            setIsLoggined(false)
+        }
+
+    },[isLoggined])
+
+    const onProjectClick=()=>{
+        isLoggined?navigate('/projects'):alert("please login")
+    }
   return (
     <div>
 
@@ -18,7 +36,10 @@ const Home = () => {
                     <div className="col-lg-6">
                         <h1 style={{fontSize:"60px"}}>  <i class="fa-brands fa-docker" style={{fontSize:"60px"}}></i>Project Fair</h1>
                         <p style={{textAlign:"justify"}}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatibus repudiandae vitae similique quasi dolores. Numquam minima doloremque quibusdam id alias maxime esse, blanditiis eius a. Amet temporibus ipsa aliquid harum?</p>
-                        <Link to={"/dashboard"} className='btn btn-warning'>Start to Explore </Link>
+                       {
+                        isLoggined? <Link to={"/dashboard"} className='btn btn-warning'>Start to Explore </Link>
+                        :<Link to={"/login"} className='btn btn-danger'>Login/Register </Link>
+                       }
                     </div>
                     <div className="col-lg-6">
                         <img src={landingImage} alt="" className='img-fluid' />
@@ -37,7 +58,7 @@ const Home = () => {
                     </div>
                 </div>
             </marquee>
-            <button className='btn btn-link mt-5' style={{textDecoration:"none"}}>Click Here to View more Projects...</button>
+            <button onClick={onProjectClick} className='btn btn-link mt-5' style={{textDecoration:"none"}}>Click Here to View more Projects...</button>
 
         </div>
 

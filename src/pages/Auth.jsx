@@ -2,11 +2,16 @@ import React, { useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-import { Link } from 'react-router-dom';
-import { registerUser } from '../../services/allApi';
+import { Link, useNavigate } from 'react-router-dom';
+import { loginUser, registerUser } from '../../services/allApi';
+import { toast } from 'react-toastify';
+
+
+
 
 
 const Auth = ({fromRegister}) => {
+  const navigate=useNavigate()
 
   const[data,setData]=useState({
     username:"",
@@ -19,21 +24,61 @@ const Auth = ({fromRegister}) => {
     
 
    if(fromRegister){
-    if(data.username && data.email && data.password){
-      const apiResponse= await registerUser(data)
+  try{
+    const{username,email,password}=data
+    if(username && email && password){
+      let apiResponse= await registerUser(data)
       console.log(apiResponse);
+      if(apiResponse.status==201){
+        alert("user login suceessfull")
+      }else{
+        if(apiResponse.status==409){
+          alert("user already exist , please login")
+          navigate('/login')
+        }
+      }
       
 
-    }else{
-      console.log("something went wrong");
+    } else{
+      console.log("fill the form");
+      
+     }
+   }catch(err){
+    console.log(err);
+    
+   }
+  }
+  else{
+    if(data.email && data.password){
+      let payload={
+        email:data.email,
+        password:data.password
+      }
+
+      let apiResponse=await loginUser(payload)
+      console.log(apiResponse);
+      if(apiResponse.status==200){
+
+        sessionStorage.setItem("user",apiResponse?.data?.user.username)
+        sessionStorage.setItem("token",apiResponse?.data?.token)
+        navigate('/dashboard')
+
+      }else if(apiResponse?.status==401){
+        // alert(apiResponse?.message)
+        toast.error(apiResponse?.message)
+      }
+      else{
+        console.log("server error");
+        
+      }
       
 
     }
-   }
-   else{
-    console.log("fill the form");
-    
-   }
+    else{
+      alert("fill the form")
+    }
+  }
+  
 
   }
   return (

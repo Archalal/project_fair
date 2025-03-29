@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -6,10 +6,91 @@ import projectimg from '../assets/image/project.png'
 
 
 const AddProject = () => {
+
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    clearContent()
+    setShow(false)
+  };
   const handleShow = () => setShow(true);
+
+  const[imgTypeStatus,setImgTypeStatus]=useState(false)
+
+
+  const[projectData,setProjectData]=useState({
+    projectImg:"",
+    projectTitle:"",
+    projectLanguage:"",
+    projectOverView:"",
+    projectGitLink:"",
+    projectWebsiteLink:""
+
+  })
+
+  const[preview,setPreview]=useState()
+
+  useEffect(()=>{
+    if(projectData.projectImg){
+      console.log(projectData.projectImg.type);
+      
+
+      if(projectData.projectImg.type=="image/jpeg" || projectData.projectImg.type=="image/png"||projectData.projectImg.type=="image/jpeg"){
+        setImgTypeStatus(true)
+      
+        
+        setPreview(URL.createObjectURL(projectData.projectImg))
+
+      }
+      else{
+        setImgTypeStatus(false)
+        alert("enter the img format(jpeg,png,jpg)")
+      }
+
+    
+    }
+  },[projectData.projectImg])
+
+  const clearContent=()=>{
+    setProjectData(
+      {
+      projectImg:"",
+      projectTitle:"",
+      projectLanguage:"",
+      projectOverView:"",
+      projectGitLink:"",
+      projectWebsiteLink:""
+      }
+    )
+
+    setPreview("")
+    setImgTypeStatus(false)
+  }
+
+
+  const onSubmit=()=>{
+
+    if(projectData.projectGitLink && projectData.projectImg && projectData.projectLanguage && projectData.projectOverView &&projectData.projectTitle&&projectData.projectWebsiteLink){
+
+      const payload=new FormData();
+      payload.append("projectImg",projectData.projectImg)
+      payload.append("projectTitle",projectData.projectTitle)
+      payload.append("projectLanguage",projectData.projectLanguage)
+      payload.append("projectOverview",projectData.projectOverView)
+      payload.append("projectGitLink",projectData.projectGitLink)
+      payload.append("projectWebsiteLink",projectData.projectWebsiteLink)
+
+    }
+    else{
+      alert("fill the form")
+    }
+
+
+
+  }
+
+
+
 
   return (
     <div>
@@ -32,19 +113,22 @@ const AddProject = () => {
       <div className="row">
         <div className="col-lg-4">
         <label>
-        <input type='file' style={{display:"none"}} />
-        <img src={projectimg} alt="" className='img-fluid' />
+        <input type='file' style={{display:"none"}}
+        onChange={((e)=>(setProjectData({...projectData,projectImg:e.target.files[0]})))} />
+        <img src={preview?preview:projectimg} alt="" className='img-fluid' />
         </label>
-        <p className='fw-bolder text-warning'>
+        {
+          !imgTypeStatus?<p className='fw-bolder text-warning'>
           Upload only the following files type (JPEG,PNG,JPG)here !!!
-        </p>
+        </p>:""
+        }
         </div>
         <div className="col-lg-8">
-          <input type="text"  placeholder='project title ' className='form-control mt-2'/>
-          <input type="text"  placeholder='Language ' className='form-control mt-3'/>
-          <input type="text"  placeholder='OverView ' className='form-control mt-3'/>
-          <input type="text"  placeholder='Project gitHub Link ' className='form-control mt-3'/>
-          <input type="text"  placeholder='project Website Link ' className='form-control mt-3'/>
+          <input onClick={(e)=>(setProjectData({...projectData,projectTitle:e.target.value}))} type="text"  placeholder='project title ' className='form-control mt-2'/>
+          <input onClick={(e)=>(setProjectData({...projectData,projectLanguage:e.target.value}))}  type="text"  placeholder='Language ' className='form-control mt-3'/>
+          <input onClick={(e)=>(setProjectData({...projectData,projectOverView:e.target.value}))}  type="text"  placeholder='OverView ' className='form-control mt-3'/>
+          <input onClick={(e)=>(setProjectData({...projectData,projectGitLink:e.target.value}))}  type="text"  placeholder='Project gitHub Link ' className='form-control mt-3'/>
+          <input onClick={(e)=>(setProjectData({...projectData,projectWebsiteLink:e.target.value}))}  type="text"  placeholder='project Website Link ' className='form-control mt-3'/>
         </div>
 
       </div>
@@ -53,7 +137,7 @@ const AddProject = () => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary">Understood</Button>
+          <Button variant="primary" onClick={onSubmit}>Submit</Button>
         </Modal.Footer>
       </Modal>
     
