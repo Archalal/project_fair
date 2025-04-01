@@ -3,6 +3,7 @@ import { Link, useNavigate} from 'react-router-dom'
 import landingImage from '../assets/image/pageLanding.png'
 import CardProject from '../component/CardProject'
 import Card from 'react-bootstrap/Card';
+import { getHomeProjects } from '../../services/allApi';
 
 
 
@@ -12,6 +13,7 @@ import Card from 'react-bootstrap/Card';
 const Home = () => {
     const[isLoggined,setIsLoggined]=useState(false)
     const navigate=useNavigate()
+    const[homeProject,setHomeProject]=useState([])
 
     useEffect(()=>{
 
@@ -24,8 +26,33 @@ const Home = () => {
 
     },[isLoggined])
 
+    useEffect(()=>{
+        homeProjects()
+    },[])
+
     const onProjectClick=()=>{
         isLoggined?navigate('/projects'):alert("please login")
+    }
+
+
+    const homeProjects=async()=>{
+        try{
+
+            let apiresponse=await getHomeProjects()
+            if(apiresponse.status==200){
+                setHomeProject(apiresponse.data)
+                console.log(apiresponse.data);
+                
+
+            }else{
+                alert(apiresponse.data)
+            }
+
+        }
+        catch(err){
+            console.log(err);
+            
+        }
     }
   return (
     <div>
@@ -53,9 +80,13 @@ const Home = () => {
             <h1 className='mt-5'>Explore the Projects</h1>
             <marquee>
                 <div className="d-flex">
-                    <div className="me-5">
-                    <CardProject />
-                    </div>
+                 {
+                    homeProject?.map((project,index)=>(
+                        <div key={index} className="me-5">
+                        <CardProject project={project} />
+                        </div>
+                    ))
+                 }
                 </div>
             </marquee>
             <button onClick={onProjectClick} className='btn btn-link mt-5' style={{textDecoration:"none"}}>Click Here to View more Projects...</button>

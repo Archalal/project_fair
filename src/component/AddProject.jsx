@@ -3,6 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import projectimg from '../assets/image/project.png'
+import { addProject } from '../../services/allApi';
 
 
 const AddProject = () => {
@@ -38,7 +39,7 @@ const AddProject = () => {
       if(projectData.projectImg.type=="image/jpeg" || projectData.projectImg.type=="image/png"||projectData.projectImg.type=="image/jpeg"){
         setImgTypeStatus(true)
       
-        
+      
         setPreview(URL.createObjectURL(projectData.projectImg))
 
       }
@@ -68,26 +69,46 @@ const AddProject = () => {
   }
 
 
-  const onSubmit=()=>{
+  const onSubmit = async() => {
+    console.log(projectData)
+    if (projectData.projectGitLink && projectData.projectImg && projectData.projectLanguage && 
+        projectData.projectOverView && projectData.projectTitle && projectData.projectWebsiteLink) {
 
-    if(projectData.projectGitLink && projectData.projectImg && projectData.projectLanguage && projectData.projectOverView &&projectData.projectTitle&&projectData.projectWebsiteLink){
+        const payload = new FormData();
+        payload.append("projectImg", projectData.projectImg);
+        payload.append("projectTitle", projectData.projectTitle);
+        payload.append("projectLanguage", projectData.projectLanguage);
+        payload.append("projectOverview", projectData.projectOverView);
+        payload.append("projectGitLink", projectData.projectGitLink);
+        payload.append("projectWebsiteLink", projectData.projectWebsiteLink);
 
-      const payload=new FormData();
-      payload.append("projectImg",projectData.projectImg)
-      payload.append("projectTitle",projectData.projectTitle)
-      payload.append("projectLanguage",projectData.projectLanguage)
-      payload.append("projectOverview",projectData.projectOverView)
-      payload.append("projectGitLink",projectData.projectGitLink)
-      payload.append("projectWebsiteLink",projectData.projectWebsiteLink)
-
+        let token = sessionStorage.getItem("token");
+        if (token) {
+            let requestHeaders = {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "multipart/form-data"
+            };
+         try {
+          let apiresponse=await addProject(payload,requestHeaders)
+          if(apiresponse.status==200){
+            alert("successfully created")
+          }
+          else{
+            console.log(apiresponse.data);
+            
+          }
+         console.log(apiresponse);
+         } catch (error) {
+          console.log(error)
+         }
+         
+        } else {
+            alert("missing token");
+        }
+    } else {
+        alert("fill the form");
     }
-    else{
-      alert("fill the form")
-    }
-
-
-
-  }
+};
 
 
 
@@ -124,11 +145,11 @@ const AddProject = () => {
         }
         </div>
         <div className="col-lg-8">
-          <input onClick={(e)=>(setProjectData({...projectData,projectTitle:e.target.value}))} type="text"  placeholder='project title ' className='form-control mt-2'/>
-          <input onClick={(e)=>(setProjectData({...projectData,projectLanguage:e.target.value}))}  type="text"  placeholder='Language ' className='form-control mt-3'/>
-          <input onClick={(e)=>(setProjectData({...projectData,projectOverView:e.target.value}))}  type="text"  placeholder='OverView ' className='form-control mt-3'/>
-          <input onClick={(e)=>(setProjectData({...projectData,projectGitLink:e.target.value}))}  type="text"  placeholder='Project gitHub Link ' className='form-control mt-3'/>
-          <input onClick={(e)=>(setProjectData({...projectData,projectWebsiteLink:e.target.value}))}  type="text"  placeholder='project Website Link ' className='form-control mt-3'/>
+          <input onChange={(e)=>(setProjectData({...projectData,projectTitle:e.target.value}))} type="text"  placeholder='project title ' className='form-control mt-2'/>
+          <input onChange={(e)=>(setProjectData({...projectData,projectLanguage:e.target.value}))}  type="text"  placeholder='Language ' className='form-control mt-3'/>
+          <input onChange={(e)=>(setProjectData({...projectData,projectOverView:e.target.value}))}  type="text"  placeholder='OverView ' className='form-control mt-3'/>
+          <input onChange={(e)=>(setProjectData({...projectData,projectGitLink:e.target.value}))}  type="text"  placeholder='Project gitHub Link ' className='form-control mt-3'/>
+          <input onChange={(e)=>(setProjectData({...projectData,projectWebsiteLink:e.target.value}))}  type="text"  placeholder='project Website Link ' className='form-control mt-3'/>
         </div>
 
       </div>
