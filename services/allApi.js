@@ -15,3 +15,11 @@ export const addProject=async(requestBody,requestHeader)=>{
 export const getHomeProjects=async()=>{
     return await commonApi('get','/getHomeProjects',"")
 }
+
+export const getAllProjects=async(headers)=>{
+    return await commonApi("get","/getallproducts","",headers)
+}
+
+export const getUserSpecified=async(headers)=>{
+    return await commonApi("get","/userspecifiedproject","",headers)
+}
