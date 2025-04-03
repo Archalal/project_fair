@@ -16,8 +16,8 @@ export const getHomeProjects=async()=>{
     return await commonApi('get','/getHomeProjects',"")
 }
 
-export const getAllProjects=async(headers)=>{
-    return await commonApi("get","/getallproducts","",headers)
+export const getAllProjects=async(headers,searchKey)=>{
+    return await commonApi("get",`/getallproducts?search=${searchKey}`,"",headers)
 }
 
 export const getUserSpecified=async(headers)=>{

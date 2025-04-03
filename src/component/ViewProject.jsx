@@ -1,16 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import AddProject from '../component/AddProject'
 import EditProject from './EditProject'
 import { getUserSpecified } from '../../services/allApi'
+import { addProjectContext } from '../context/ProjectContext'
+
+
 
 
 const ViewProject = () => {
+
+  const[addProjectResponse,setProjectResponse]=useContext(addProjectContext)
 
 
   const[projectData,setProjectData]=useState([])
   useEffect(()=>{
     getUserProject()
-  },[])
+  },[addProjectResponse])
 
   const getUserProject=async()=>{
 
@@ -53,7 +58,7 @@ const ViewProject = () => {
       </div>
       {
         projectData?.map((a,index)=>(
-            <div className="mt-2">
+            <div key={index} className="mt-2">
         <div className="border shadow rounded d-flex justify-content-between p-2">
           <h4>{a.projectTitle}</h4>
           <div className='d-flex'>

@@ -8,10 +8,11 @@ import { getAllProjects } from '../../services/allApi'
 
 const Projects = () => {
   const[getProject,setgetProject]=useState([])
+  const[searchKey,setSearchKey]=useState("")
 
   useEffect(()=>{
     viewAllProducts()
-  },[])
+  },[searchKey])
 
 
 
@@ -25,7 +26,7 @@ const Projects = () => {
       
     }
   
-      let apiresponse=await getAllProjects(headers)
+      let apiresponse=await getAllProjects(headers,searchKey)
       if(apiresponse.status==200){
         setgetProject(apiresponse.data)
       }
@@ -52,7 +53,8 @@ const Projects = () => {
      <div  className="d-flex justify-content-between mt-5">
     
     <h2>All projects</h2>
-  <input  className=" form-control w-25" placeholder='Search project by language'></input>
+  <input   onChange={((e)=>setSearchKey(e.target.value))}
+  className=" form-control w-25" placeholder='Search project by language'></input>
    
 
   </div>

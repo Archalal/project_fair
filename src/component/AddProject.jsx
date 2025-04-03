@@ -1,14 +1,19 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import projectimg from '../assets/image/project.png'
 import { addProject } from '../../services/allApi';
+import { addProjectContext } from '../context/ProjectContext';
+
+
 
 
 const AddProject = () => {
 
   const [show, setShow] = useState(false);
+
+  const[addProjectResponse,setProjectResponse]=useContext(addProjectContext)
 
   const handleClose = () => {
     clearContent()
@@ -90,8 +95,10 @@ const AddProject = () => {
             };
          try {
           let apiresponse=await addProject(payload,requestHeaders)
-          if(apiresponse.status==200){
+          if(apiresponse.status==201){
+            setProjectResponse(apiresponse.data)
             alert("successfully created")
+            handleClose()
           }
           else{
             console.log(apiresponse.data);
