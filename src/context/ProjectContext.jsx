@@ -9,7 +9,7 @@ const ProjectContext = ({children}) => {
   return (
     <div>
         <addProjectContext.Provider
-        value={(addProjectResponse,setProjectResponse)}>
+        value={{addProjectResponse,setProjectResponse}}>
                {children}
       
 

@@ -9,7 +9,7 @@ import { addProjectContext } from '../context/ProjectContext'
 
 const ViewProject = () => {
 
-  const[addProjectResponse,setProjectResponse]=useContext(addProjectContext)
+  const{addProjectResponse,setProjectResponse}=useContext(addProjectContext)
 
 
   const[projectData,setProjectData]=useState([])
@@ -63,7 +63,7 @@ const ViewProject = () => {
           <h4>{a.projectTitle}</h4>
           <div className='d-flex'>
             <div >
-              <EditProject />
+              <EditProject  project={a}/>
             </div>
             <div className='btn'>
              <a  target='_blank' href={a.projectGitLink}><i class="fa-brands fa-github"></i></a>

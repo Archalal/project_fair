@@ -13,12 +13,14 @@ const AddProject = () => {
 
   const [show, setShow] = useState(false);
 
-  const[addProjectResponse,setProjectResponse]=useContext(addProjectContext)
+  const{addProjectResponse,setProjectResponse}=useContext(addProjectContext)
 
   const handleClose = () => {
     clearContent()
     setShow(false)
   };
+  console.log(addProjectResponse);
+  
   const handleShow = () => setShow(true);
 
   const[imgTypeStatus,setImgTypeStatus]=useState(false)
@@ -99,6 +101,7 @@ const AddProject = () => {
             setProjectResponse(apiresponse.data)
             alert("successfully created")
             handleClose()
+          
           }
           else{
             console.log(apiresponse.data);
@@ -165,7 +168,7 @@ const AddProject = () => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={onSubmit}>Submit</Button>
+          <Button variant="primary" onClick={onSubmit}>Edit chnage</Button>
         </Modal.Footer>
       </Modal>
     

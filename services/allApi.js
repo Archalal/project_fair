@@ -23,3 +23,8 @@ export const getAllProjects=async(headers,searchKey)=>{
 export const getUserSpecified=async(headers)=>{
     return await commonApi("get","/userspecifiedproject","",headers)
 }
+
+export const updateProjects=async(id,requestBody,headers)=>{
+    return await commonApi("put",`/project/${id}/update`,requestBody,headers)
+
+}
