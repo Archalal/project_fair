@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 import AddProject from '../component/AddProject'
 import EditProject from './EditProject'
-import { getUserSpecified } from '../../services/allApi'
-import { addProjectContext } from '../context/ProjectContext'
+import { delProject, getUserSpecified } from '../../services/allApi'
+import { addProjectContext, editProjectContext } from '../context/ProjectContext'
 
 
 
@@ -10,12 +10,15 @@ import { addProjectContext } from '../context/ProjectContext'
 const ViewProject = () => {
 
   const{addProjectResponse,setProjectResponse}=useContext(addProjectContext)
+  const{editProjectResponse,setEditProjectResponse}=useContext(editProjectContext)
+
+  const[delProjects,setDeletedProject]=useState([])
 
 
   const[projectData,setProjectData]=useState([])
   useEffect(()=>{
     getUserProject()
-  },[addProjectResponse])
+  },[addProjectResponse,editProjectResponse,delProjects])
 
   const getUserProject=async()=>{
 
@@ -46,10 +49,37 @@ const ViewProject = () => {
     }else{
       alert("please login")
     }
-
-
+  
 
   }
+  const onDelClick=async(id)=>{
+    let token=sessionStorage.getItem("token")
+    if(token){
+      const headers={
+        "Authorization":`Bearer ${token}`
+      }
+      try{
+      let apiResponse=  await delProject(id,headers)
+        if(apiResponse.status==200){
+          setDeletedProject(apiResponse.data)
+
+        }else{
+          alert("something went wrong")
+        }
+
+      }catch(err){
+        console.log(err);
+        
+      }
+
+
+    }else{
+      alert("please login")
+    }
+
+  }
+
+
   return (
     <div>
       <div className="  d-flex justify-content-between">
@@ -68,7 +98,8 @@ const ViewProject = () => {
             <div className='btn'>
              <a  target='_blank' href={a.projectGitLink}><i class="fa-brands fa-github"></i></a>
             </div>
-                  <button className='btn text-danger'><i class="fa-solid fa-trash"></i></button>
+                  <button onClick={()=>onDelClick(a._id)}
+                   className='btn text-danger'><i class="fa-solid fa-trash"></i></button>
         
           </div>
         </div>

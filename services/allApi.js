@@ -28,3 +28,7 @@ export const updateProjects=async(id,requestBody,headers)=>{
     return await commonApi("put",`/project/${id}/update`,requestBody,headers)
 
 }
+export const delProject=async(id,headers)=>{
+    return await commonApi("delete",`/project/${id}/delete`,{},headers)
+
+}

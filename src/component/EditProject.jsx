@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 // import projectimg from "../assets/image/project.png";
 import baseURL from "../../services/baseURL";
 import { updateProjects } from "../../services/allApi";
+import { editProjectContext } from "../context/ProjectContext";
+
 
 
 
@@ -15,6 +17,7 @@ const EditProject = ({ project }) => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const{editProjectResponse,setEditProjectResponse}=useContext(editProjectContext)
 
   const [EditingProject, setEditingProject] = useState({
     projectId:project._id,
@@ -76,7 +79,11 @@ const EditProject = ({ project }) => {
             }
             let apiresponse=await updateProjects(EditingProject.projectId,paylod,reqHeaders)
             if(apiresponse.status==200){
+              setEditProjectResponse(apiresponse.data)
+              
               console.log("successfully edited");
+              handleClose()
+              
               
             }
 
