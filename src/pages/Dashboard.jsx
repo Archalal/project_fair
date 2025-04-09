@@ -14,7 +14,10 @@ const Dashboard = () => {
       <div className="container-fluid">
         <div className="row">
           <div className="col-lg-8">
-          <h3>Welcome <span className='text-primary'>User</span>,</h3>
+          <h3>Welcome <span className='text-primary'>{
+
+            sessionStorage.getItem("user")? sessionStorage.getItem("user"):"user"
+}</span>,</h3>
           <ViewProject/>
           </div>
           <div className="col-lg-4">

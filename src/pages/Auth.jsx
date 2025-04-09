@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUser, registerUser } from '../../services/allApi';
 import { toast } from 'react-toastify';
+import { LoginContext } from '../context/AuthContext';
+
 
 
 
 
 
 const Auth = ({fromRegister}) => {
+  const{isLoggined,setIsLoginned}=useContext(LoginContext)
   const navigate=useNavigate()
 
   const[data,setData]=useState({
@@ -56,8 +59,10 @@ const Auth = ({fromRegister}) => {
       }
 
       let apiResponse=await loginUser(payload)
+      setIsLoginned(true)
       console.log(apiResponse);
       if(apiResponse.status==200){
+       
 
         sessionStorage.setItem("user",apiResponse?.data?.user.username)
         sessionStorage.setItem("token",apiResponse?.data?.token)

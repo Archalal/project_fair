@@ -32,3 +32,9 @@ export const delProject=async(id,headers)=>{
     return await commonApi("delete",`/project/${id}/delete`,{},headers)
 
 }
+export const editUser=async(requestBody,headers)=>{
+    return await commonApi('patch',`/profile/update`,requestBody,headers)
+}
+export const displaySingleUser=async(headers)=>{
+    return await commonApi('/get',`/getUserDetails`,"",headers)
+}

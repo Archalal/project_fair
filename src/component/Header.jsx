@@ -1,10 +1,20 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom';
+import { LoginContext } from '../context/AuthContext';
+
 
 
 const Header = ({insideDashboard}) => {
+  const{isLoggined,setIsLoginned}=useContext(LoginContext)
+  
+  const logout=()=>{
+    sessionStorage.clear()
+    setIsLoginned(false)
+  
+    
+  }
   return (
     <div >
        <Navbar className="bg-body-primary " sticky='top' >
@@ -16,7 +26,9 @@ const Header = ({insideDashboard}) => {
           </Navbar.Brand>
          </Link>
          {insideDashboard?
-         <button className='btn btn-link'>Logout <i class="fa-solid fa-right-from-bracket"></i></button>:""}
+         <button
+         onClick={logout}
+          className='btn btn-link'>Logout <i class="fa-solid fa-right-from-bracket"></i></button>:""}
         </Container>
       </Navbar>
       
