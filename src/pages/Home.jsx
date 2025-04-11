@@ -61,7 +61,7 @@ const Home = () => {
             <div className="container">
                 <div className="row align-items-center">
                     <div className="col-lg-6">
-                        <h1 style={{fontSize:"60px"}}>  <i class="fa-brands fa-docker" style={{fontSize:"60px"}}></i>Project Fair</h1>
+                        <h1 style={{fontSize:"60px"}}>  <i class="fa-brands fa-docker" style={{fontSize:"60px"}}></i>ProjectFair</h1>
                         <p style={{textAlign:"justify"}}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatibus repudiandae vitae similique quasi dolores. Numquam minima doloremque quibusdam id alias maxime esse, blanditiis eius a. Amet temporibus ipsa aliquid harum?</p>
                        {
                         isLoggined? <Link to={"/dashboard"} className='btn btn-warning'>Start to Explore </Link>
